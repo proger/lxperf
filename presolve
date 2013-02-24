@@ -1,0 +1,6 @@
+#!/bin/sh
+
+for x in $(pgrep -f $*); do
+	[ $x -eq $$ ] && continue
+	echo $x $(readlink /proc/$x/exe)
+done

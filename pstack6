@@ -1,0 +1,3 @@
+#!/bin/sh
+
+(printf "set height 0\nthread apply all backtrace\nquit\n"; cat /dev/zero) | gdb -q $*

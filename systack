@@ -1,0 +1,6 @@
+#!/bin/sh
+
+pid=$1
+
+timeout 1 strace -iv -f -p $pid
+cat /proc/$pid/stack

@@ -1,0 +1,9 @@
+#!/bin/sh
+
+me=$(dirname $0)
+pid=$1
+
+ps -o pid,stat,start_time,etime,time,vsz,rss,args -p $pid
+$me/poorprof $1
+$me/systack $1
+lsof -ni -a -p $pid

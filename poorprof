@@ -1,0 +1,24 @@
+#!/bin/bash
+
+#
+# see: http://poormansprofiler.org/
+#
+
+proc=$*
+sleeptime=${sleeptime:-0}
+nsamples=${nsamples:-1}
+pstack=${pstack:-pstack7}
+
+me=$(dirname $0)
+
+for x in $(seq 1 $nsamples)
+  do
+    $me/$pstack $proc
+    sleep $sleeptime
+  done | \
+awk '
+  BEGIN { s = ""; } 
+  /^Thread/ { print s; s = ""; } 
+  /^\#/ { if (s != "" ) { s = s "," $4} else { s = $4 } } 
+  END { print s }' | \
+sort | uniq -c | sort -r -n -k 1,1
