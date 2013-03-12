@@ -26,10 +26,18 @@
 #    V2.0, Oct 30 2009, Ján Sáreník <jasan@x31.com>
 #                       Rewritten to cover compatibility with other
 #                       Bourne shell implementations (pdksh, dash)
+#
+#    V2.1  Feb 25 2013, Vladimir Kirillov <proger@hackndev.com>
+#                       github/proger/lxkit
+#                       Get a stack trace on timeout.
+#
+
+me=$(dirname $0)
 
 if [ "$#" -lt "2" ]; then
-    echo "Usage:   `basename $0` timeout_in_seconds command" >&2
+    echo "Usage:   `basename $0` [trace] timeout_in_seconds command" >&2
     echo "Example: `basename $0` 2 sleep 3 || echo timeout" >&2
+    echo "Example: `basename $0` trace 2 sleep 3 || echo timeout" >&2
     exit 1
 fi
 
@@ -37,8 +45,9 @@ cleanup()
 {
     trap - ALRM               #reset handler to default
     kill -ALRM $a 2>/dev/null #stop timer subshell if running
+    [ -n "$timeout_trace" ] && pi $!  #get the process info
     kill $! 2>/dev/null &&    #kill last job
-      exit 124                #exit with 124 if it was running
+    exit 124                #exit with 124 if it was running
 }
 
 watchit()
@@ -48,6 +57,11 @@ watchit()
     kill -ALRM $$
 }
 
+if [ "$1" = "trace" ]; then
+    timeout_trace=1
+    shift
+fi
+
 watchit $1& a=$!         #start the timeout
 shift                    #first param was timeout for sleep
 trap "cleanup" ALRM INT  #cleanup after timeout
@@ -55,3 +69,5 @@ trap "cleanup" ALRM INT  #cleanup after timeout
 kill -ALRM $a            #send ALRM signal to watchit
 wait $a                  #wait for watchit to finish cleanup
 exit $RET                #return the value
+
+# vim: ts=4 sts=4 et sw=4
