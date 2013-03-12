@@ -1,4 +1,4 @@
 probe signal.send
 {
-	printf("%s(%d) -> %s(%d): %s(%d)\n", execname(), pid(), pid_name, sig_pid, sig_name, sig);
+	printf("%d %s(%d) -> %s(%d): %s(%d)\n", gettimeofday_s(), execname(), pid(), pid_name, sig_pid, sig_name, sig);
 }
