@@ -10,3 +10,5 @@ Because Linux introspection sucks.
 * `systack $pid` - strace a little and get per-process kernel stack
 * `timeout X command` - coreutils/timeout bash-based shim for distributions from dinosaur sage
 * `poorprof $pid` - poor man's profiler (http://poormansprofiler.org/), nicely collapses stacks
+
+* `stap/` - collection of SystemTap scripts

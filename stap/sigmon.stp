@@ -1,0 +1,4 @@
+probe signal.send
+{
+	printf("%s(%d) -> %s(%d): %s(%d)\n", execname(), pid(), pid_name, sig_pid, sig_name, sig);
+}
