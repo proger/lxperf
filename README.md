@@ -14,8 +14,8 @@ Things dirty enough not to be PR-ed to [perf-tools](https://github.com/brendangr
 
 SystemTap scripts:
 
-* [stap/sigmon.stp] - monitoring signals (also see [killsnoop](https://github.com/brendangregg/perf-tools/blob/master/killsnoop))
+* [stap/sigmon.stp](stap/sigmon.stp) - monitoring signals (also see [killsnoop](https://github.com/brendangregg/perf-tools/blob/master/killsnoop))
 
 Perf scripts:
 
-* [perf/sysfailed] - trace failing syscalls and their exit codes
+* [perf/sysfailed](perf/sysfailed) - trace failing syscalls and their exit codes
