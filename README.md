@@ -1,7 +1,7 @@
 lxperf
 ======
 
-Because Linux introspection sucks.
+Because default Linux introspection sucks.
 Things dirty enough not to be PR-ed to [perf-tools](https://github.com/brendangregg/perf-tools).
 
 * `pi $pid` - get process `$pid` info using pstack, systack and lsof
@@ -11,6 +11,10 @@ Things dirty enough not to be PR-ed to [perf-tools](https://github.com/brendangr
 * `systack $pid` - strace a little and get per-process kernel stack
 * `timeout X command` - coreutils/timeout bash-based shim for distributions from dinosaurs age
 * `poorprof $pid` - poor man's profiler (http://poormansprofiler.org/), nicely collapses stacks
+
+Stats:
+
+* [connstat](connstat) - samples the count of established connections per process name
 
 SystemTap scripts:
 
@@ -23,5 +27,6 @@ Perf scripts:
 ## things to paste: perf on ubuntu
 
 ```console
-# apt-get install linux-tools-common linux-cloud-tools-generic linux-tools-$(uname -r) linux-cloud-tools-$(uname -r)
+apt-get install linux-tools-common linux-cloud-tools-generic \
+    linux-tools-$(uname -r) linux-cloud-tools-$(uname -r)
 ```
