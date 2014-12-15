@@ -19,3 +19,9 @@ SystemTap scripts:
 Perf scripts:
 
 * [perf/sysfailed](perf/sysfailed) - trace failing syscalls and their exit codes
+
+## things to paste: perf on ubuntu
+
+```console
+# apt-get install linux-tools-common linux-cloud-tools-generic linux-tools-$(uname -r) linux-cloud-tools-$(uname -r)
+```
