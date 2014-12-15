@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+# example:
+#	root@ip-172-31-0-71:~/perf# ./sysfailed -p 1270,1271,1272,1273
+#	^C[ perf record: Woken up 1 times to write data ]
+#	[ perf record: Captured and wrote 0.800 MB perf.data (~34971 samples) ]
+#	'trace' not valid for hardware events. Ignoring.
+#	'trace' not valid for software events. Ignoring.
+#	'trace' not valid for unknown events. Ignoring.
+#	4	thumbor	syscalls:sys_exit_connect:	EINPROGRESS
+#	16	thumbor	syscalls:sys_exit_newstat:	ENOENT
+#	8	thumbor	syscalls:sys_exit_read:	EAGAIN
+
+
+trap '' INT QUIT TERM PIPE HUP
+me=$(dirname $0)
+
+ulimit -n 32768
+
+echo "use ^C to stop recording" >&2
+set -x
+
+perf record -e 'syscalls:sys_exit_*' "$@"
+#perf script -f pid,comm,event,trace | awk '!/^#/' | sort -k3 | uniq -c
+perf script -f comm,event,trace | awk '!/^#/' | sort | uniq -c | python "$me/finderrnos.py"
