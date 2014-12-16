@@ -14,7 +14,7 @@ Things dirty enough not to be PR-ed to [perf-tools](https://github.com/brendangr
 
 Stats:
 
-* [connstat](connstat) - samples the count of established connections per process name
+* [connstat](connstat.hs) - samples the count of established connections per process name
 
 SystemTap scripts:
 

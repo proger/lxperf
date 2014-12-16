@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-
-# samples the count of established connections per process name
-
-while true; do
-	echo "====== $(date)"
-	ss -ep -t -o state established | awk 'NR!=1 {split($0, users, "\""); tab[users[2]] += 1} END {for (e in tab) print e, tab[e]}'
-	sleep 1
-done
