@@ -11,6 +11,7 @@ import System.Process (shell, createProcess, waitForProcess, StdStream(..), Crea
 import System.IO
 import System.IO.Error
 import System.Exit (exitSuccess)
+import Data.Time.Clock.POSIX (getPOSIXTime)
 
 import qualified Data.Attoparsec.ByteString as A
 import qualified Data.Attoparsec.ByteString.Char8 as A8
@@ -20,7 +21,7 @@ import qualified Data.ByteString.Char8 as B
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
 
-import Data.Either (rights)
+import Data.Either (rights, lefts)
 import Data.List (transpose)
 
 import qualified Text.PrettyPrint.Boxes as P
@@ -84,14 +85,19 @@ users = concat . rights . fmap line . B.lines
     line s = A.parseOnly parser s
 
     parser = do
-      recvq <- field
-      _sendq <- field
-      _local <- field
-      _peer <- field
-      _timer <- field
-      u <- "users:(" *> commad triple <* ")"
-      skip
-      return u
+        recvq <- field
+        _sendq <- field
+        _local <- field
+        _peer <- field
+        eitherUser1 <- A.eitherP user field
+        eitherUser2 <- A.eitherP user field
+        eitherUser3 <- A.eitherP user field
+        skip
+        let eithers = [eitherUser1, eitherUser2, eitherUser3]
+        return $ case lefts eithers of
+                     [] -> fail "couldn't find users"
+                     x:_ -> x
+      where user = "users:(" *> commad triple <* ")"
 
 agg = count
 connStats = Map.toList . agg . users 
@@ -116,7 +122,13 @@ limitLine = do
   return $ Limit (unwords tag) soft hard (B.unpack unit)
 
 limits pid =
-  withFile ("/proc/" ++ show pid ++ "/limits") ReadMode $ \handle -> do
+  let
+#if defined(linux_HOST_OS)
+    limitFile = "/proc/" ++ show pid ++ "/limits"
+#else
+    limitFile = "limits.txt"
+#endif
+  in withFile limitFile ReadMode $ \handle -> do
     limits <- map (A.parseOnly limitLine) . tail . B.lines <$> B.hGetContents handle
     return $ rights limits
 
@@ -132,10 +144,12 @@ showLimit1 (Limit _ soft hard _) = show' soft ++ "/" ++ show' hard
 toBox :: [[String]] -> P.Box
 toBox rows = P.hsep 2 P.left dat
   where
-    dat = map (P.vcat P.left . map P.text) (transpose (["COMM", "COUNT", "LIMIT"]:rows))
+    dat = map (P.vcat P.left . map P.text) (transpose (["PROC", "CONNS", "FDLIMIT"]:rows))
 
 main = do
   forever $ do
+    now <- getPOSIXTime
+    print now
     stats <- consume ss connStats
     rows <- mapM (\(u@(User _ pid), count) -> limitNoFile <$> limits pid >>= \l -> return [show u, show count, showLimit1 l]) stats
     P.printBox . toBox $ rows
