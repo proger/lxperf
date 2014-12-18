@@ -28,8 +28,15 @@ Perf scripts:
 
 [Ubuntu: getting kernel debuginfo](https://wiki.ubuntu.com/Kernel/Systemtap#Where_to_get_debug_symbols_for_kernel_X.3F).
 
-```console
+```bash
 apt-get install linux-tools-common linux-cloud-tools-generic \
     linux-tools-$(uname -r) linux-cloud-tools-$(uname -r)
 ```
 
+Testing dbgsym:
+
+```bash
+perf probe \
+    --vmlinux "$(dpkg -L linux-image-$(uname -r)-dbgsym | grep vmlinux)" \
+    -nv 'tcp_sendmsg size'
+```
