@@ -4,6 +4,8 @@ lxperf
 Because default Linux introspection sucks.
 Things dirty enough not to be PR-ed to [perf-tools](https://github.com/brendangregg/perf-tools).
 
+For Darwin/OS X see [darwinkit](http://github.com/proger/darwinkit).
+
 * `pi $pid` - get process `$pid` info using pstack, systack and lsof
 * `presolve $str` - resolve pid and executable by matching args
 * `pstack6 $pid` - get process user stack using GDB 6.3 (ugly but portable)
