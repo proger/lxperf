@@ -26,7 +26,10 @@ Perf scripts:
 
 ## things to paste: perf on ubuntu
 
+[Ubuntu: getting kernel debuginfo](https://wiki.ubuntu.com/Kernel/Systemtap#Where_to_get_debug_symbols_for_kernel_X.3F).
+
 ```console
 apt-get install linux-tools-common linux-cloud-tools-generic \
     linux-tools-$(uname -r) linux-cloud-tools-$(uname -r)
 ```
+
