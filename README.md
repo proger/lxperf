@@ -14,7 +14,7 @@ Things dirty enough not to be PR-ed to [perf-tools](https://github.com/brendangr
 
 Stats:
 
-* [connstat](connstat.hs) - samples the count of established connections per process name
+* [connstat](connstat.hs) - samples the count of established connections per process name (It used to be a bash/awk script but I fed up. Compiled with ghc 7.8.3, make sure you `cabal install attoparsec boxes`)
 
 SystemTap scripts:
 
