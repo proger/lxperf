@@ -33,7 +33,7 @@ shell' s = (shell s){ std_out = CreatePipe, std_err = Inherit, std_in = Inherit 
 
 #if defined(linux_HOST_OS)
 ss = do
-  (_, Just hout, _, ph) <- createProcess (shell' "ss -ep -t -o state established")
+  (_, Just hout, _, ph) <- createProcess (shell' "ss -n -ep -t -o state established")
   return (hout, Just ph)
 #else
 ss = do
@@ -85,7 +85,7 @@ users = concat . rights . fmap line . B.lines
     line s = A.parseOnly parser s
 
     parser = do
-        recvq <- field
+        _recvq <- field
         _sendq <- field
         _local <- field
         _peer <- field
