@@ -26,6 +26,10 @@ Perf scripts:
 
 * [perf/sysfailed](perf/sysfailed) - trace failing syscalls and their exit codes
 
+Random introspection
+
+* [connmatch](connmatch/) turns a `hostname ip` pair file file and directory that looks like `lsof_outputs_dir/hostname` into a graphviz file
+
 ## perf_events on ubuntu
 
 Get `perf(1)`:
